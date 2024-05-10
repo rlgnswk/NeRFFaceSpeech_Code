@@ -1,7 +1,9 @@
-# Official NeRFFaceSpeech Code, CVPRW 2024
+# Official NeRFFaceSpeech Code
+
+## NeRFFaceSpeech: One-shot Audio-diven 3D Talking Head Synthesis via Generative Prior, CVPRW 2024
 
 [Paper](http://arxiv.org/abs/2405.05749/)
 
 [Project Page](https://rlgnswk.github.io/NeRFFaceSpeech_ProjectPage/)
 
-Coming soon
+It will be updated.
