@@ -35,11 +35,14 @@ pip install .
 mkdir pretrained_networks
 ```
 
+
 Download SadTalker_V0.0.2_256.safetensors
 https://github.com/OpenTalker/SadTalker/releases to NeRFFaceSpeech_Code\pretrained_networks\sad_talker_pretrained
 
 Download
 https://huggingface.co/wsj1995/sadTalker/blob/af80749f8c9af3702fbd0272df14ff086986a1de/BFM09_model_info.mat to NeRFFaceSpeech_Code\pretrained_networks\BFM_for_3DMM-Fitting-Pytorch\BFM
+
+@Thanks nitinmukesh's reports
 
 ### Place Pretrained Weights at pretrained_networks/
 
@@ -48,7 +51,7 @@ https://huggingface.co/wsj1995/sadTalker/blob/af80749f8c9af3702fbd0272df14ff0869
 ```.bash
 
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
-    --outdir=out_test --trunc=0.7 \
+    --outdir=out_test_z --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_data/test_audio/AdamSchiff_0.wav" \
                 --seeds=6;        
@@ -62,7 +65,7 @@ The inversion process for real image takes some time.
 ```.bash
 
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_image.py   \
-    --outdir=out_test --trunc=0.7 \
+    --outdir=out_test_real --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_data/test_audio/AdamSchiff_0.wav" \
                 --test_img="test_data/test_img/32.png";       
@@ -72,26 +75,28 @@ python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_image.py   \
 ## Command (Pose Varying)
 
 The first command is for head pose varying only.
-The second command is for head pose and exp varing by video-frames (at that time, audio input is useless.)
+
+The second command is for head pose and exp varing by video-frames 
+(at that time, audio input is only for the initial frame.)
 
 The video frames should be pose-predictable.
 
 ```.bash
 
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given_poses.py   \
-    --outdir=out_test --trunc=0.7 \
+    --outdir=out_test_given_pose --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_data/test_audio/AdamSchiff_0.wav" \
-                --test_img="test_data/test_img/32.png";\
-                    --motion_guide_img_folder="your frames"     
+                --test_img="test_data/test_img/AustinScott0_0_cropped.jpg"\
+                    --motion_guide_img_folder="driving_frames";     
 
 
 python StyleNeRF/main_NeRFFaceSpeech_video_driven.py   \
-    --outdir=out_test --trunc=0.7 \
+    --outdir=out_test_video_driven --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_data/test_audio/AdamSchiff_0.wav" \
-                --test_img="test_data/test_img/32.png";\
-                    --motion_guide_img_folder="your frames"
+                --test_img="test_data/test_img/DougJones_0_cropped.jpg"\
+                    --motion_guide_img_folder="driving_frames";
 ```
 
 ## Custom Data for Use

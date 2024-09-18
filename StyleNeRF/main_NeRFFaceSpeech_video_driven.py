@@ -274,6 +274,8 @@ def generate_images(
         import natsort
         imglist = natsort.natsorted(os.listdir(motion_guide_img_folder))
         
+        pred_coeff = out[0:0+1]
+        pred_rot_prev = input_pose
         #for i in range(len(imglist)):  
         for i in tqdm(range(len(imglist)), desc="Processing frames"):
             with torch.no_grad():
@@ -293,8 +295,9 @@ def generate_images(
                     #_, _, face_proj_moved, _ = render_3dmm(Deep3Dmodel, img_tesnor_224_prc, frame_full_coeff, get_rot=True)
                     
                 except:
+                    print("pose undetected")
                     pred_rot = pred_rot_prev
-                    frame_full_coeff = pred_rot
+                    frame_full_coeff = pred_coeff
                                     
             with torch.no_grad():
                 
