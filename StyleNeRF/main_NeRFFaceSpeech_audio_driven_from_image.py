@@ -289,9 +289,9 @@ def generate_images(
                 
                 scaled_face_proj_moved = torch.cat((scaled_face_proj_moved, ref_torso), dim=1)
                 
-                gt_exp_param_eval_nofit = audio2exp_model(frame_mel[:,i:i+1,:,:], ref_exp_coeffs_nofit[:1], val_ratio)
-                frame_ref_exp_coeffs_nofit = gt_exp_param_eval_nofit.squeeze(-1)
-                ref_full_coeff_nofit[:, 80: 144] = frame_ref_exp_coeffs_nofit
+                #gt_exp_param_eval_nofit = audio2exp_model(frame_mel[:,i:i+1,:,:], ref_exp_coeffs_nofit[:1], val_ratio)
+                #frame_ref_exp_coeffs_nofit = gt_exp_param_eval_nofit.squeeze(-1)
+                #ref_full_coeff_nofit[:, 80: 144] = frame_ref_exp_coeffs_nofit
 
                 synthesis_kwargs['ref_vertices'] = ref_scaled_proj_2d_vertex
                 synthesis_kwargs['pred_vertices'] = scaled_face_proj_moved

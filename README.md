@@ -63,6 +63,31 @@ python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_image.py   \
 
 ```
 
+## Command (Pose Varying)
+
+The first command is for head pose varying only.
+The second command is for head pose and exp varing by video-frames (at that time, audio input is useless.)
+
+The video frames should be pose-predictable.
+
+```.bash
+
+python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given_poses.py   \
+    --outdir=out_test --trunc=0.7 \
+        --network=pretrained_networks/ffhq_1024.pkl \
+            --test_data="test_audio/AdamSchiff_0.wav" \
+                --test_img="test_data/test_img/32.png";\
+                    --motion_guide_img_folder="your frames"     
+
+
+python StyleNeRF/main_NeRFFaceSpeech_video_driven.py   \
+    --outdir=out_test --trunc=0.7 \
+        --network=pretrained_networks/ffhq_1024.pkl \
+            --test_data="test_audio/AdamSchiff_0.wav" \
+                --test_img="test_data/test_img/32.png";\
+                    --motion_guide_img_folder="your frames"
+```
+
 ## Custom Data for Use
 
 ### If you want to use new audio and image data, you must follow the formats of [StyleNeRF](https://github.com/facebookresearch/StyleNeRF) for image data and [Wav2Lip](https://github.com/Rudrabha/Wav2Lip) or [SadTalker](https://github.com/OpenTalker/SadTalker) for audio data.

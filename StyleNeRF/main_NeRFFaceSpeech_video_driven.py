@@ -13,11 +13,11 @@ from tqdm import tqdm
 
 '''
 
-python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
-    --outdir=out_test_0918_10 --trunc=0.7 \
-        --network=/home/gihoon/NeRFFaceSpeech_CVPR/pretrained_networks/ffhq_1024.pkl \
-            --test_data="/home/gihoon/NeRFFaceSpeech_CVPR/test_data/test_audio/AdamSchiff_0.wav" \
-                --seeds=10;    
+CUDA_VISIBLE_DEVICES=2 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given_poses.py   \
+    --outdir=out_test --trunc=0.7 \
+        --network=pretrained_networks/ffhq_1024.pkl \
+            --test_data="test_audio/AdamSchiff_0.wav" \
+                --test_img="test_data/test_img/32.png";    
 
 '''
 
@@ -28,15 +28,17 @@ python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
 @click.option('--noise-mode', help='Noise mode', type=click.Choice(['const', 'random', 'none']), default='const', show_default=True)
 @click.option('--outdir', help='Where to save the output images', type=str, required=True, metavar='DIR')
 @click.option('--test_data', default=".", type=str)
-@click.option('--seeds', default=0, type=int)
+@click.option('--test_img', default=".", type=str)
+@click.option('--motion_guide_img_folder', default=".", type=str)
 def generate_images(
     ctx: click.Context,
     network_pkl: str,
     truncation_psi: float,
     noise_mode: str,
     outdir: str,
-    seeds: int,
-    test_data="."
+    test_img=".",
+    test_data=".",
+    motion_guide_img_folder='.'
 ):
     
     set_seed(0)
@@ -78,13 +80,12 @@ def generate_images(
         G2.eval()
         
         ##-- Sampling from Z
-        with torch.no_grad():
-            z = torch.from_numpy(np.random.RandomState(seeds).randn(1, G.z_dim)).to(device)           
-            ws = G2.mapping(z, None, truncation_psi=truncation_psi)
-            img_z = G2.synthesis(ws)
-            #dict_keys(['batch_size', 'camera_matrices', 'latent_codes', 'theta', 'styles', 'di', 'di_fine', 'p_i', 'p_f', 'sigma_raw_coarse', 'feat_coarse', 'sigma_raw_fine', 'feat_fine', 'img_nerf', 'inpaint_feat', 'img'])
-            PIL.Image.fromarray(proc_img(img_z['img'])[0], 'RGB').save(f'{outdir}/input_img.png')
-            image_path = f'{outdir}/input_img.png'
+        image_path = test_img 
+        input_img = PIL.Image.open(os.path.join(image_path)).convert('RGB')
+        input_img_224= input_img.resize((224, 224))
+        input_img.save(f'{outdir}/input_img.png')
+        input_img_224_proc = torch.tensor(np.array(input_img_224)/255., dtype=torch.float32).permute(2, 0, 1).unsqueeze(0).to(device)
+
         
         ## -- Load BiSeNet
         from audio2NeRF_segNet import BiSeNet, seg_mean, seg_std
@@ -111,10 +112,8 @@ def generate_images(
         with torch.no_grad():
             frame_full_coeff = Deep3Dmodel.net_recon(input_img_224_proc)
             _, _, _, pred_rot_mat = render_3dmm(Deep3Dmodel, input_img_224_proc, frame_full_coeff, get_rot=True)
-            #input_pose = get_front_matrix(device, rot=pred_rot_mat.cpu().numpy())
-            #import ipdb; ipdb.set_trace()
-            input_pose = img_z['camera_matrices']
-          
+            input_pose = get_front_matrix(device, rot=pred_rot_mat.cpu().numpy())
+        
         if os.path.isfile(f"{outdir}/G_PTI.pt"):
             G_PTI = torch.load(f"{outdir}/G_PTI.pt")
             with torch.no_grad():
@@ -124,24 +123,29 @@ def generate_images(
             ws = torch.load(f"{outdir}/w_PTI.pt")
             bg_latents = torch.load(f"{outdir}/bg_PTI.pt")
         else:
-            G_PTI = G2
-            ws = ws
-            bg_latents = img_z['latent_codes']
+            sys.path.insert(0,'PTI')
+            from training_pti.coaches.single_id_coach import SingleIDCoach_custom
+        
+            G_PTI, ws, bg_latents = SingleIDCoach_custom(image_path, G2, input_pose, tun_iter= 2000).train()
             torch.save(G_PTI, f"{outdir}/G_PTI.pt")
             torch.save(ws, f"{outdir}/w_PTI.pt")
             torch.save(bg_latents, f"{outdir}/bg_PTI.pt")
-            
+            G2 = G_PTI
+        
+        
         synthesis_kwargs = {}
         synthesis_kwargs['render_option'] = "freeze_bg"
         synthesis_kwargs['latent_codes'] = bg_latents
         synthesis_kwargs['camera_RT'] = get_front_matrix(device)
         
         ### calculating ray points for deformation
+        
         with torch.no_grad():
                         
             output = G2(styles=ws, truncation_psi=truncation_psi, noise_mode=noise_mode, **synthesis_kwargs)
             
             #####################################################Frontal View
+            
             ref_di = output['di']
             ref_di_fine = output['di_fine']
             ref_p_i = output['p_i']
@@ -271,18 +275,42 @@ def generate_images(
             out =  torch.cat(exp_coeff_pred_save, axis=0) * expression_scale
         
         #for i in range(frame_mel.size(1)):
-        for i in tqdm(range(frame_mel.size(1)), desc="Processing frames"):    
+        import natsort
+        imglist = natsort.natsorted(os.listdir(motion_guide_img_folder))
+        
+        #for i in range(len(imglist)):  
+        for i in tqdm(range(len(imglist)), desc="Processing frames"):
+            with torch.no_grad():
+                try:
+                    frame = Image.open(os.path.join(motion_guide_img_folder, imglist[i])).convert('RGB')
+                    frame = frame.resize((224, 224))
+                    #frame.save(f'{outdir_valid_video}/i_frame_{i}.png')
+                    frame = torch.tensor(np.array(frame)/255., dtype=torch.float32).permute(2, 0, 1).unsqueeze(0).to(device)
+                    frame_full_coeff = Deep3Dmodel.net_recon(frame)
+                    
+                    _, _, _, pred_rot_mat = render_3dmm(Deep3Dmodel, img_tesnor_224_prc, frame_full_coeff, get_rot=True)
+                    pred_rot = get_front_matrix(device, rot=pred_rot_mat.cpu().numpy())
+                    pred_rot_prev = pred_rot
+                    pred_coeff = frame_full_coeff
+                    #frame_full_coeff[:, :80 ] = ref_full_coeff[:, :80 ]
+                    #frame_full_coeff[:, 144:] = ref_full_coeff[:, 144:]
+                    #_, _, face_proj_moved, _ = render_3dmm(Deep3Dmodel, img_tesnor_224_prc, frame_full_coeff, get_rot=True)
+                    
+                except:
+                    pred_rot = pred_rot_prev
+                    frame_full_coeff = pred_rot
+                                    
             with torch.no_grad():
                 
                 w_frame_2d = ws_2d.repeat(1,1,1)
-                synthesis_kwargs['camera_matrices'] = input_pose #get_front_matrix(device)#input_pose#get_front_matrix(device) # input_pose
+                #synthesis_kwargs['camera_RT'] = input_pose #get_front_matrix(device)#input_pose#get_front_matrix(device) # input_pose
+                synthesis_kwargs['camera_RT'] = pred_rot #get_front_matrix(device)#input_pose#get_front_matrix(device) # input_pose
 
-                frame_ref_exp_coeffs = out[i:i+1].squeeze(-1) #gt_exp_param_eval.squeeze(-1)  #
+                frame_ref_exp_coeffs = frame_full_coeff[:, 80: 144]#out[i:i+1].squeeze(-1) #gt_exp_param_eval.squeeze(-1)  #
                 
                 ref_full_coeff[:, 80: 144] = frame_ref_exp_coeffs # replace the exp param which is corresponding to audio
                 
                 _, _, face_proj_moved, _ = render_3dmm(Deep3Dmodel, img_tesnor_224_prc, ref_full_coeff, get_lm=True)
-                #import ipdb; ipdb.set_trace()
                 
                 scaled_face_proj_moved = scale_and_shift_coordinates(face_proj_moved[:, ::4,:])
                 
@@ -352,7 +380,7 @@ def generate_images(
                 
             count+=1
         
-        creat_final_video(outdir_valid_final, test_data, outdir)
+        creat_final_video_motion(outdir_valid_final, test_data, outdir)
         
         
         

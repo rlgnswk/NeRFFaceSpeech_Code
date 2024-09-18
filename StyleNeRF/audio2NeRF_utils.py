@@ -92,6 +92,49 @@ def creat_final_video(outdir_valid_final, test_data, outdir, watermark=True):
         print(f"Deleted file: {out_refine_path}")
     #import ipdb;ipdb.set_trace()
 
+def creat_final_video_motion(outdir_valid_final, test_data, outdir, watermark=True):
+    import glob
+    import natsort
+    import shutil
+    from imwatermark import WatermarkEncoder
+    encoder = WatermarkEncoder()
+    wm = 'fake'
+    encoder.set_watermark('bytes', wm.encode('utf-8'))
+    print("video processing .. ")
+    img_array = []
+    for filename in natsort.natsorted(glob.glob(f'{outdir_valid_final}/*.png')):
+        #print(filename)
+        
+        try:
+            img = cv2.imread(filename)
+            height, width, _ = img.shape
+            size = (width,height)
+            if watermark:
+                img = encoder.encode(img, 'dwtDct')
+                cv2.putText(img, "fake video", (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 255, 255), 2, cv2.LINE_AA)
+            
+            img_array.append(img)
+        except:
+            pass
+            
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(f'{outdir}/output_NeRFFaceSpeech.mp4', fourcc , 25, size)
+    
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()    
+    
+    epoch_folder = os.path.join(outdir, 'epoch_0_final')
+    if os.path.exists(epoch_folder):
+        shutil.rmtree(epoch_folder)
+        print(f"Deleted folder: {epoch_folder}")
+    
+    out_refine_path = os.path.join(outdir, 'out_refine.mp4')
+    if os.path.exists(out_refine_path):
+        os.remove(out_refine_path)
+        print(f"Deleted file: {out_refine_path}")
+    #import ipdb;ipdb.set_trace()
+
 def load_audio2exp_model(device):
     
     sys.path.insert(0,'SadTalker')
