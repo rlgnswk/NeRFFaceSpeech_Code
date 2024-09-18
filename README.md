@@ -45,7 +45,7 @@ python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
     --outdir=out_test --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_data/test_audio/AdamSchiff_0.wav" \
-                --seeds=0;        
+                --seeds=6;        
 
 ```
 

@@ -14,10 +14,10 @@ from tqdm import tqdm
 '''
 
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
-    --outdir=out_test_0918_0 --trunc=0.7 \
+    --outdir=out_test_0918_10 --trunc=0.7 \
         --network=/home/gihoon/NeRFFaceSpeech_CVPR/pretrained_networks/ffhq_1024.pkl \
             --test_data="/home/gihoon/NeRFFaceSpeech_CVPR/test_data/test_audio/AdamSchiff_0.wav" \
-                --seeds=0;    
+                --seeds=10;    
 
 '''
 
@@ -111,7 +111,9 @@ def generate_images(
         with torch.no_grad():
             frame_full_coeff = Deep3Dmodel.net_recon(input_img_224_proc)
             _, _, _, pred_rot_mat = render_3dmm(Deep3Dmodel, input_img_224_proc, frame_full_coeff, get_rot=True)
-            input_pose = get_front_matrix(device, rot=pred_rot_mat.cpu().numpy())
+            #input_pose = get_front_matrix(device, rot=pred_rot_mat.cpu().numpy())
+            #import ipdb; ipdb.set_trace()
+            input_pose = img_z['camera_matrices']
           
         if os.path.isfile(f"{outdir}/G_PTI.pt"):
             G_PTI = torch.load(f"{outdir}/G_PTI.pt")
@@ -273,7 +275,7 @@ def generate_images(
             with torch.no_grad():
                 
                 w_frame_2d = ws_2d.repeat(1,1,1)
-                synthesis_kwargs['camera_RT'] = input_pose #get_front_matrix(device)#input_pose#get_front_matrix(device) # input_pose
+                synthesis_kwargs['camera_matrices'] = input_pose #get_front_matrix(device)#input_pose#get_front_matrix(device) # input_pose
 
                 frame_ref_exp_coeffs = out[i:i+1].squeeze(-1) #gt_exp_param_eval.squeeze(-1)  #
                 
