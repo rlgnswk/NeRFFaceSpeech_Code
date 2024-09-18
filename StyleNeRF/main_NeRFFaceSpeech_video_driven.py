@@ -17,7 +17,8 @@ CUDA_VISIBLE_DEVICES=2 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given
     --outdir=out_test --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
             --test_data="test_audio/AdamSchiff_0.wav" \
-                --test_img="test_data/test_img/32.png";    
+                --test_img="test_data/test_img/32.png";\
+                    --motion_guide_img_folder="your frames"
 
 '''
 
