@@ -7,6 +7,10 @@
 
 ## Setting
 
+We have confirmed that the code runs under the following conditions.
+
+Python 3.7.16 // CUDA 11.7 //GPU 3090
+
 ```.bash
 git clone https://github.com/rlgnswk/NeRFFaceSpeech_Code.git
 cd NeRFFaceSpeech_Code/
