@@ -6,7 +6,7 @@
 
 [Project Page](https://rlgnswk.github.io/NeRFFaceSpeech_ProjectPage/)
 
-## 1. Setting
+## Setting
 
 ```.bash
 git clone https://github.com/rlgnswk/NeRFFaceSpeech_Code.git
@@ -15,9 +15,9 @@ conda env create -f environment.yml
 conda activate nerffacespeech
 ```
 
-## 2. Download Pretrained Weights in pretrained_networks/
+## Download Pretrained Weights in pretrained_networks/
 
-[Download Link]()
+[Download Link](https://drive.google.com/drive/folders/1W3TGSh5ufmT3T1XPwU7LRB_y4bcbmm9i?usp=sharing)
 
 ```.bash
 mkdir pretrained_networks
@@ -25,7 +25,18 @@ mkdir pretrained_networks
 
 ### Place Pretrained Weights at pretrained_networks/
 
-## 3. Command (Generated from latent space)
+## Nvdiffrast 
+
+### Please install Nvdiffrast inside the Deep3DFaceRecon_pytorch folder.
+
+```.bash
+cd Deep3DFaceRecon_pytorch
+git clone https://github.com/NVlabs/nvdiffrast
+cd nvdiffrast
+pip install .
+```
+
+## Command (Generated from latent space)
 
 ```.bash
 
