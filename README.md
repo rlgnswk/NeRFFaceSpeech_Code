@@ -14,8 +14,6 @@ conda env create -f environment.yml
 conda activate nerffacespeech
 ```
 
-### Nvdiffrast 
-
 #### Please install Nvdiffrast inside the Deep3DFaceRecon_pytorch folder.
 
 ```.bash
