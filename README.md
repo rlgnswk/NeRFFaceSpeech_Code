@@ -2,9 +2,8 @@
 
 ## NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior, CVPRW 2024
 
-[Paper](http://arxiv.org/abs/2405.05749/)
+[Paper](http://arxiv.org/abs/2405.05749/)  /  [Project Page](https://rlgnswk.github.io/NeRFFaceSpeech_ProjectPage/)
 
-[Project Page](https://rlgnswk.github.io/NeRFFaceSpeech_ProjectPage/)
 
 ## Setting
 
@@ -15,7 +14,7 @@ conda env create -f environment.yml
 conda activate nerffacespeech
 ```
 
-## Download Pretrained Weights in pretrained_networks/
+## Download 
 
 [Download Link](https://drive.google.com/drive/folders/1W3TGSh5ufmT3T1XPwU7LRB_y4bcbmm9i?usp=sharing)
 
