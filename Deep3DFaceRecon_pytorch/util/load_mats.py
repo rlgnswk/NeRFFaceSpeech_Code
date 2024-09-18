@@ -10,7 +10,7 @@ import os.path as osp
 # load expression basis
 def LoadExpBasis(bfm_folder='BFM'):
     n_vertex = 53215
-    bfm_folder = '/root/gihoon/Audio2GeRF_submodule/Deep3DFaceRecon_pytorch/BFM'
+    bfm_folder = 'pretrained_networks/BFM'
     Expbin = open(osp.join(bfm_folder, 'Exp_Pca.bin'), 'rb')
     #Expbin = open("/root/gihoon/Audio2GeRF_submodule/Deep3DFaceRecon_pytorch/BFM/Exp_Pca.bin", 'rb')
     exp_dim = array('i')
@@ -32,7 +32,7 @@ def LoadExpBasis(bfm_folder='BFM'):
 # transfer original BFM09 to our face model
 def transferBFM09(bfm_folder='BFM'):
     print('Transfer BFM09 to BFM_model_front......')
-    bfm_folder = '/root/gihoon/Audio2GeRF_submodule/Deep3DFaceRecon_pytorch/BFM'
+    bfm_folder = 'pretrained_networks/BFM'
     original_BFM = loadmat(osp.join(bfm_folder, '01_MorphableModel.mat'))
     
     #original_BFM = loadmat('/root/gihoon/Audio2GeRF_submodule/Deep3DFaceRecon_pytorch/BFM/01_MorphableModel.mat')
