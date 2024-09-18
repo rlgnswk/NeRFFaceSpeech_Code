@@ -35,6 +35,12 @@ pip install .
 mkdir pretrained_networks
 ```
 
+Download SadTalker_V0.0.2_256.safetensors
+https://github.com/OpenTalker/SadTalker/releases to NeRFFaceSpeech_Code\pretrained_networks\sad_talker_pretrained
+
+Download
+https://huggingface.co/wsj1995/sadTalker/blob/af80749f8c9af3702fbd0272df14ff086986a1de/BFM09_model_info.mat to NeRFFaceSpeech_Code\pretrained_networks\BFM_for_3DMM-Fitting-Pytorch\BFM
+
 ### Place Pretrained Weights at pretrained_networks/
 
 ## Command (Generated from Latent Space)
@@ -58,7 +64,7 @@ The inversion process for real image takes some time.
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_image.py   \
     --outdir=out_test --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
-            --test_data="test_audio/AdamSchiff_0.wav" \
+            --test_data="test_data/test_audio/AdamSchiff_0.wav" \
                 --test_img="test_data/test_img/32.png";       
 
 ```
@@ -75,7 +81,7 @@ The video frames should be pose-predictable.
 python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given_poses.py   \
     --outdir=out_test --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
-            --test_data="test_audio/AdamSchiff_0.wav" \
+            --test_data="test_data/test_audio/AdamSchiff_0.wav" \
                 --test_img="test_data/test_img/32.png";\
                     --motion_guide_img_folder="your frames"     
 
@@ -83,7 +89,7 @@ python StyleNeRF/main_NeRFFaceSpeech_audio_driven_w_given_poses.py   \
 python StyleNeRF/main_NeRFFaceSpeech_video_driven.py   \
     --outdir=out_test --trunc=0.7 \
         --network=pretrained_networks/ffhq_1024.pkl \
-            --test_data="test_audio/AdamSchiff_0.wav" \
+            --test_data="test_data/test_audio/AdamSchiff_0.wav" \
                 --test_img="test_data/test_img/32.png";\
                     --motion_guide_img_folder="your frames"
 ```
