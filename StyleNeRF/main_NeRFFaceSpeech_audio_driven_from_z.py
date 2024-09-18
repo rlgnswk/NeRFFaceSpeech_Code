@@ -13,11 +13,6 @@ from tqdm import tqdm
 
 '''
 
-python StyleNeRF/main_NeRFFaceSpeech_audio_driven_from_z.py   \
-    --outdir=out_test_0918_10 --trunc=0.7 \
-        --network=/home/gihoon/NeRFFaceSpeech_CVPR/pretrained_networks/ffhq_1024.pkl \
-            --test_data="/home/gihoon/NeRFFaceSpeech_CVPR/test_data/test_audio/AdamSchiff_0.wav" \
-                --seeds=10;    
 
 '''
 
