@@ -103,6 +103,10 @@ python StyleNeRF/main_NeRFFaceSpeech_video_driven.py   \
 
 ### If you want to use new audio and image data, you must follow the formats of [StyleNeRF](https://github.com/facebookresearch/StyleNeRF) for image data and [Wav2Lip](https://github.com/Rudrabha/Wav2Lip) or [SadTalker](https://github.com/OpenTalker/SadTalker) for audio data.
 
+## Post-processing @ [nitinmukesh](https://github.com/nitinmukesh)
+
+There is an applicable post-processing method called [GFPGAN](https://github.com/TencentARC/GFPGAN). It is being applied to other methods as well and can help produce better results. Please refer to the [issue](https://github.com/rlgnswk/NeRFFaceSpeech_Code/issues/5)!
+
 ## Caution: Error Accumulation
 
 The proposed method may not work well due to accumulated errors such as landmark prediction errors and inversion(reconsturction) errors.
