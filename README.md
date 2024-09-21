@@ -119,3 +119,20 @@ This project is intended for research and educational purposes only. Misuse of t
 
 We appreciate [StyleNeRF](https://github.com/facebookresearch/StyleNeRF), [PTI](https://github.com/danielroich/PTI), [Wav2Lip](https://github.com/Rudrabha/Wav2Lip), [SadTalker](https://github.com/OpenTalker/SadTalker), [Deep3Drecon](https://github.com/sicxu/Deep3DFaceRecon_pytorch) and [3DMM-Fitting](https://github.com/ascust/3DMM-Fitting-Pytorch) for sharing their codes and baselines.
 
+## Citation
+
+```bibtex
+  @misc{kim2024nerffacespeech,
+    title={NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior}, 
+    author={Gihoon Kim and Kwanggyoon Seo and Sihun Cha and Junyong Noh},
+    year={2024},
+    eprint={2405.05749},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}}
+            
+@inproceedings{kim2024nerffacespeech,
+    title={NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior},
+    author={Gihoon Kim, Kwanggyoon Seo, Sihun Cha and Junyong Noh},
+    booktitle={IEEE Computer Vision and Pattern Recognition Workshops},
+    year={2024}}
+```
