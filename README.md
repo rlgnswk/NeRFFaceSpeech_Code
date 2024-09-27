@@ -1,6 +1,6 @@
 # Official NeRFFaceSpeech Code
 
-## NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior, CVPRW 2024
+## NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior, [CVPR 2024 Workshop on AI for Content Creation (AI4CC)](https://ai4cc.net/)
 
 [Paper](http://arxiv.org/abs/2405.05749/)  /  [Project Page](https://rlgnswk.github.io/NeRFFaceSpeech_ProjectPage/)
 
