@@ -122,7 +122,7 @@ We appreciate [StyleNeRF](https://github.com/facebookresearch/StyleNeRF), [PTI](
 ## Citation
 
 ```bibtex
-  @misc{kim2024nerffacespeech,
+@misc{kim2024nerffacespeech,
     title={NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior}, 
     author={Gihoon Kim and Kwanggyoon Seo and Sihun Cha and Junyong Noh},
     year={2024},
