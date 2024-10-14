@@ -130,7 +130,7 @@ We appreciate [StyleNeRF](https://github.com/facebookresearch/StyleNeRF), [PTI](
     archivePrefix={arXiv},
     primaryClass={cs.CV}}
             
-@inproceedings{kim2024nerffacespeech,
+@misc{kim2024nerffacespeech,
     title={NeRFFaceSpeech: One-shot Audio-driven 3D Talking Head Synthesis via Generative Prior},
     author={Gihoon Kim, Kwanggyoon Seo, Sihun Cha and Junyong Noh},
     booktitle={IEEE Computer Vision and Pattern Recognition Workshops},
